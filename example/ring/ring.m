@@ -49,4 +49,4 @@ A(in)=1;
 MSH.sx(:)=diff(xxx)(:);
 MSH.sy(:)=diff(yyy)(:);
 MSH=AddZWall(MSH,[1,1,2],A,0);
-WriteVTKFile(MSH,'movel.vtk',2);
+WriteVTKFile(MSH,'model.vtk',2);
