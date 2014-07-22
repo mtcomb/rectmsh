@@ -8,7 +8,9 @@ function WriteASCIIFile(MSH,filename,header)
   MSH.IDy(end,:,:)=MSH.eps; MSH.IDy(:,end,:)=MSH.eps; MSH.IDy(:,:,end)=MSH.eps;
   MSH.IDz(end,:,:)=MSH.eps; MSH.IDz(:,end,:)=MSH.eps; MSH.IDz(:,:,end)=MSH.eps;
 
-  color=[MSH.IDx(MSH.IDx~=MSH.eps)(:);MSH.IDy(MSH.IDy~=MSH.eps)(:);MSH.IDz(MSH.IDz~=MSH.eps)(:)].';
+  color=[MSH.IDx(MSH.IDx~=MSH.eps)(:);...
+         MSH.IDy(MSH.IDy~=MSH.eps)(:);...
+         MSH.IDz(MSH.IDz~=MSH.eps)(:)].';
   c=unique(color);
   c=sort(c);
 
@@ -40,23 +42,26 @@ function WriteASCIIFile(MSH,filename,header)
   ind = find(MSH.IDx~=MSH.eps);
   [i,j,k]=ind2sub(size(MSH.IDx),ind);
   fprintf(fid,'%d %d\n',numel(ind),4);
-  for n=1:length(i)
-    fprintf(fid,'%d %d %d %d\n',[i(n),j(n),k(n),find(c==MSH.IDx(i(n),j(n),k(n)))]);
-  end
+  [_,mid]=ismember(MSH.IDx(ind),c);
+  assert(isempty(find(mid==0)));
+  M=[i,j,k,mid].';
+  fprintf(fid,'%d %d %d %d\n',M);
 
   ind = find(MSH.IDy~=MSH.eps);
   [i,j,k]=ind2sub(size(MSH.IDy),ind);
   fprintf(fid,'%d %d\n',numel(ind),4);
-  for n=1:length(i)
-    fprintf(fid,'%d %d %d %d\n',[i(n),j(n),k(n),find(c==MSH.IDy(i(n),j(n),k(n)))]);
-  end
+  [_,mid]=ismember(MSH.IDy(ind),c);
+  assert(isempty(find(mid==0)));
+  M=[i,j,k,mid].';
+  fprintf(fid,'%d %d %d %d\n',M);
 
   ind = find(MSH.IDz~=MSH.eps);
   [i,j,k]=ind2sub(size(MSH.IDz),ind);
   fprintf(fid,'%d %d\n',numel(ind),4);
-  for n=1:length(i)
-    fprintf(fid,'%d %d %d %d\n',[i(n),j(n),k(n),find(c==MSH.IDz(i(n),j(n),k(n)))]);
-  end
+  [_,mid]=ismember(MSH.IDz(ind),c);
+  assert(isempty(find(mid==0)));
+  M=[i,j,k,mid].';
+  fprintf(fid,'%d %d %d %d\n',M);
 
   % axes
   % begin
